@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+
+const url = "https://api.quotable.io/random";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [quote, setQuote] = useState("");
+  const [author, setAuthor] = useState("");
+
+  useEffect(() => {
+    fetch(url)
+      .then((response) => response.json())
+      .then((quote) => {
+        setQuote(quote.content);
+        setAuthor(quote.author);
+      });
+  }, []);
+
+  const handleClick = () => {
+    fetch(url)
+      .then((response) => response.json())
+      .then((quote) => {
+        setQuote(quote.content);
+        setAuthor(quote.author);
+      });
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
+    <div className="w-full h-screen flex justify-center items-center flex-col bg-slate-600">
+      <div className="w-1/3 rounded-xl shadow-lg p-2 bg-lime-200">
+        <p className="text-2xl font-serif text-center">{quote}</p>
+        <p className="text-md font-serif font-bold italic text-center mt-1">
+          ~{author}~
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+
+      <button
+        className="bg-lime-200 hover:bg-lime-300 font-bold py-2 px-4 rounded-full mt-2"
+        onClick={handleClick}
+      >
+        Generate
+      </button>
+    </div>
+  );
 }
 
-export default App
+export default App;
